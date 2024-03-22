@@ -25,19 +25,35 @@
         border-radius: 5px;
         word-wrap: break-word;
     }
-    #user-input {
-        width: calc(100% - 70px);
+    #user-input-container {
         margin-top: 10px;
+        display: flex;
+        align-items: center;
+    }
+    #user-input {
+        flex: 1;
         padding: 8px;
         border: 1px solid #ccc;
         border-radius: 5px;
+    }
+    #send-button {
+        margin-left: 10px;
+        padding: 8px 16px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
     }
 </style>
 </head>
 <body>
 <div id="chat-container">
     <div id="chat-messages"></div>
+</div>
+<div id="user-input-container">
     <textarea id="user-input" placeholder="Type your message..." rows="4"></textarea>
+    <button id="send-button" onclick="sendMessage()">Send</button>
 </div>
 
 <script>
@@ -58,6 +74,7 @@
             chatMessages.appendChild(messageDiv);
             document.getElementById("user-input").value = "";
             document.getElementById("user-input").focus();
+            chatMessages.scrollTop = chatMessages.scrollHeight; // 자동 스크롤 아래로
         }
     }
 </script>
