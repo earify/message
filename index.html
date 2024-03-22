@@ -14,10 +14,6 @@
         overflow-y: auto;
         height: 300px;
     }
-    #chat-messages {
-        display: flex;
-        flex-direction: column-reverse;
-    }
     .message {
         background-color: #f0f0f0;
         padding: 8px;
@@ -71,10 +67,9 @@
             var messageDiv = document.createElement("div");
             messageDiv.className = "message";
             messageDiv.textContent = userInput;
-            chatMessages.appendChild(messageDiv);
+            chatMessages.insertBefore(messageDiv, chatMessages.firstChild);
             document.getElementById("user-input").value = "";
             document.getElementById("user-input").focus();
-            chatMessages.scrollTop = chatMessages.scrollHeight; // 자동 스크롤 아래로
         }
     }
 </script>
