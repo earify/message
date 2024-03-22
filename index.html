@@ -5,72 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Chat Window</title>
 <style>
-    #chat-container {
-        width: 400px;
-        margin: auto;
-        padding: 20px;
-        border: 1px solid #ccc;
-        border-radius: 5px;
-        overflow-y: auto;
-        height: 300px;
+    body {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, sans-serif;
     }
-    .message {
+    .chat-container {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
         background-color: #f0f0f0;
-        padding: 8px;
-        margin-bottom: 5px;
-        border-radius: 5px;
-        word-wrap: break-word;
-        text-align: left;
+        padding: 10px;
+        box-sizing: border-box;
     }
-    #user-input-container {
-        margin-top: 10px;
+    .input-container {
         display: flex;
         align-items: center;
     }
-    #user-input {
+    .input-container input[type="text"] {
         flex: 1;
         padding: 8px;
+        margin-right: 10px;
         border: 1px solid #ccc;
         border-radius: 5px;
+        font-size: 16px;
     }
-    #send-button {
-        margin-left: 10px;
+    .input-container button {
         padding: 8px 16px;
         background-color: #4CAF50;
         color: white;
         border: none;
         border-radius: 5px;
         cursor: pointer;
+        font-size: 16px;
     }
 </style>
 </head>
 <body>
-<div id="chat-container">
-    <div id="chat-messages"></div>
-</div>
-<div id="user-input-container">
-    <textarea id="user-input" placeholder="Type your message..." rows="4"></textarea>
-    <button id="send-button" onclick="sendMessage()">Send</button>
+<div class="chat-container">
+    <div class="input-container">
+        <input type="text" id="message-input" placeholder="Type your message...">
+        <button id="send-button">Send</button>
+    </div>
 </div>
 
 <script>
-    document.getElementById("user-input").addEventListener("keydown", function(event) {
-        if (event.key === "Enter" && !event.shiftKey) {
-            event.preventDefault();
+    document.getElementById("send-button").addEventListener("click", function() {
+        sendMessage();
+    });
+
+    document.getElementById("message-input").addEventListener("keypress", function(event) {
+        if (event.key === "Enter") {
             sendMessage();
         }
     });
 
     function sendMessage() {
-        var userInput = document.getElementById("user-input").value;
-        if (userInput.trim() !== "") {
-            var chatMessages = document.getElementById("chat-messages");
-            var messageDiv = document.createElement("div");
-            messageDiv.className = "message";
-            messageDiv.textContent = userInput;
-            chatMessages.insertBefore(messageDiv, chatMessages.firstChild);
-            document.getElementById("user-input").value = "";
-            document.getElementById("user-input").focus();
+        var messageInput = document.getElementById("message-input");
+        var message = messageInput.value.trim();
+        if (message !== "") {
+            // 여기에 메시지를 전송하는 코드를 추가하세요.
+            console.log("Message sent:", message);
+            messageInput.value = "";
         }
     }
 </script>
