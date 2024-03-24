@@ -1,120 +1,53 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>간단한 채팅 프로그램</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            background-color: #121212; /* 다크 모드 배경색 */
-            color: #fff; /* 다크 모드 텍스트 색상 */
-        }
-        
-        #chat-box {
-            flex: 1;
-            overflow-y: scroll;
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin-bottom: 10px;
-            background-color: #2e2e2e; /* 채팅 박스 배경색 */
-        }
-        
-        #message-input {
-            width: calc(100% - 22px);
-            margin: 0;
-            padding: 5px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            outline: none;
-            background-color: #2e2e2e; /* 입력칸 배경색 */
-            color: #fff; /* 입력칸 텍스트 색상 */
-        }
-        
-        #send-button {
-            width: 50px;
-            margin: 0;
-            padding: 5px;
-            border: none;
-            background-color: #007bff; /* 전송 버튼 배경색 */
-            color: #fff; /* 전송 버튼 텍스트 색상 */
-            border-radius: 5px;
-            cursor: pointer;
-            outline: none;
-        }
-        
-        .input-container {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            width: 100%;
-            position: fixed;
-            bottom: 0;
-            left: 0;
-            padding: 10px;
-            background-color: #2e2e2e; /* 입력칸 컨테이너 배경색 */
-        }
-    </style>
+    <title>메시지 보드</title>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script>
+        var firebaseConfig = {
+            // 복사한 Firebase 설정을 여기에 붙여넣습니다.
+            apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
+            authDomain: "msgify-fa5b6.firebaseapp.com",
+            databaseURL: "https://msgify-fa5b6-default-rtdb.asia-southeast1.firebasedatabase.app",
+            projectId: "msgify-fa5b6",
+            storageBucket: "msgify-fa5b6.appspot.com",
+            messagingSenderId: "88430514111",
+            appId: "1:88430514111:web:1432b05b11eec790061b0a",
+            measurementId: "G-8QDM93Y88C"
+        };
+        // Firebase 초기화
+        firebase.initializeApp(firebaseConfig);
+    </script>
 </head>
 <body>
-    <div id="chat-box"></div>
-    <div class="input-container">
-        <input type="text" id="nickname-input" placeholder="닉네임을 입력하세요...">
-        <input type="text" id="message-input" placeholder="메시지를 입력하세요...">
-        <button id="send-button" onclick="sendMessage()">전송</button>
+    <div>
+        <input type="text" id="nickname" placeholder="닉네임">
+        <input type="text" id="message" placeholder="메시지">
+        <button onclick="sendMessage()">전송</button>
     </div>
+    <div id="messages"></div>
 
-    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js"></script>
     <script>
-        // Firebase 설정
-        const firebaseConfig = {
-            // Firebase 프로젝트 설정 정보 입력
-                apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
-                authDomain: "msgify-fa5b6.firebaseapp.com",
-                databaseURL: "https://msgify-fa5b6-default-rtdb.asia-southeast1.firebasedatabase.app",
-                projectId: "msgify-fa5b6",
-                storageBucket: "msgify-fa5b6.appspot.com",
-                messagingSenderId: "88430514111",
-                appId: "1:88430514111:web:1432b05b11eec790061b0a",
-                measurementId: "G-8QDM93Y88C"
-        };
-        firebase.initializeApp(firebaseConfig);
+        const messagesRef = firebase.database().ref('messages');
 
-        // Firebase Realtime Database 참조
-        const database = firebase.database();
-
-        // 닉네임 설정
-        let nickname = "나";
-        document.getElementById("nickname-input").addEventListener("change", function(event) {
-            nickname = event.target.value;
-        });
-
-        // 메시지 저장 및 표시 관련 함수
         function sendMessage() {
-            const messageInput = document.getElementById("message-input");
-            const message = messageInput.value;
-            if (message.trim() !== "") {
-                database.ref("messages").push({
-                    nickname: nickname,
-                    message: message
-                });
-                messageInput.value = "";
+            const nickname = document.getElementById('nickname').value.trim();
+            const message = document.getElementById('message').value.trim();
+
+            if (nickname && message) {
+                // 메시지 데이터베이스에 추가
+                messagesRef.push({ nickname, message });
+                document.getElementById('message').value = ''; // 메시지 필드 초기화
             }
         }
 
-        // 메시지 표시
-        database.ref("messages").on("child_added", function(snapshot) {
+        // 실시간으로 메시지 가져오기
+        messagesRef.on('child_added', function(snapshot) {
             const message = snapshot.val();
-            const chatBox = document.getElementById("chat-box");
-            const messageElement = document.createElement("div");
-            messageElement.textContent = message.nickname + ": " + message.message;
-            chatBox.appendChild(messageElement);
-            chatBox.scrollTop = chatBox.scrollHeight;
+            const messageElement = document.createElement('div');
+            messageElement.textContent = `${message.nickname}: ${message.message}`;
+            document.getElementById('messages').appendChild(messageElement);
         });
     </script>
 </body>
