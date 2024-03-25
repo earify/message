@@ -2,44 +2,51 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
-    background-color: #121212; /* 다크 모드 배경색 */
-    color: #E0E0E0; /* 다크 모드 글자색 */
+    background-color: #121212; /* 배경색을 어두운 색으로 변경 */
+    color: #E0E0E0; /* 글자색을 밝은 색으로 변경 */
 }
+
 #container {
     display: flex;
     flex-direction: column;
     height: 100%;
 }
+
 #messages {
     flex-grow: 1;
     overflow-y: auto;
     padding: 10px;
     box-sizing: border-box;
-    background-color: #2C2C2C; /* 메시지 영역 배경색 */
-    color: #FFFFFF; /* 메시지 영역 글자색 */
+    background-color: #2C2C2C; /* 메시지 영역의 배경색도 어두운 색으로 변경 */
+    color: #FFFFFF; /* 메시지 영역의 글자색을 밝은 색으로 변경 */
 }
+
 #inputArea {
     display: flex;
     padding: 10px;
     box-sizing: border-box;
 }
+
 #nickname, #message, button {
     height: 40px;
     margin: 0;
     padding: 0 10px;
     box-sizing: border-box;
-    background-color: #333333; /* 입력란과 버튼 배경색 */
-    color: #E0E0E0; /* 입력란과 버튼 글자색 */
-    border: 1px solid #555555; /* 경계선 색상 */
+    background-color: #333333; /* 입력란과 버튼의 배경색을 어두운 색으로 변경 */
+    color: #E0E0E0; /* 입력란과 버튼의 글자색을 밝은 색으로 변경 */
+    border: 1px solid #555; /* 경계선 색상도 어울리는 색으로 변경 */
 }
+
 #nickname {
     flex: 0 1 150px;
     margin-right: 10px;
 }
+
 #message {
     flex: 1;
     margin-right: 10px;
 }
+
 button {
     flex: 0 1 auto;
     cursor: pointer;
