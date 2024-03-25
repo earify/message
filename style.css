@@ -1,19 +1,83 @@
+/* 전체 페이지에 대한 기본 설정 */
 body, html {
-    height: 100%;
-    margin: 0;
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #333; /* 다크 모드 적용 */
+  color: white; /* 다크 모드에서의 글자 색상 */
 }
+
+/* 채팅 컨테이너 설정 */
 #container {
-    display: flex;
-    flex-direction: column;
-    height: 100%;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
 }
+
+/* 메시지 표시 영역 */
 #messages {
-    flex-grow: 1;
-    overflow-y: auto;
-    padding: 10px;
-    box-sizing: border-box;
+  flex-grow: 1;
+  overflow-y: auto;
+  padding: 20px;
+  display: flex;
+  flex-direction: column; /* 새 메시지가 아래에서부터 추가되도록 */
+  background: #222; /* 다크 모드에서의 배경색 */
 }
+
+/* 입력 영역 설정 */
 #inputArea {
-    padding: 10px;
-    box-sizing: border-box;
+  display: flex;
+  padding: 10px;
+  background: #444; /* 다크 모드에서의 배경색 */
+}
+
+#inputArea input[type="text"] {
+  /* 닉네임 입력 칸의 너비 고정 */
+  width: calc(100% / 8 - 10px); /* 전체 너비의 1/8에서 오른쪽 마진을 빼줍니다. */
+  margin-right: 10px;
+  background: #555;
+  border: none;
+  color: white;
+  padding: 10px;
+}
+
+#inputArea textarea {
+  flex-grow: 1;
+  background: #555;
+  border: none;
+  color: white;
+  padding: 10px;
+  margin-right: 10px; /* 버튼과의 간격 */
+}
+
+#inputArea button {
+  padding: 10px 20px;
+  background: #0066ff;
+  color: white;
+  border: none;
+  cursor: pointer;
+}
+
+#inputArea button:hover {
+  background: #0056e8;
+}
+
+/* 스크롤바 스타일 */
+#messages::-webkit-scrollbar {
+  width: 8px;
+}
+
+#messages::-webkit-scrollbar-thumb {
+  background: #555; 
+  border-radius: 4px;
+}
+
+#messages::-webkit-scrollbar-track {
+  background: #333;
+}
+
+/* 닉네임을 표시하는 span 태그에 볼드 스타일 적용 */
+.nickname {
+  font-weight: bold;
 }
