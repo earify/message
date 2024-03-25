@@ -52,4 +52,36 @@ button {
     cursor: pointer;
 }
 
+/* 메시지 컨테이너 스타일 */
+#messages {
+    background-color: #2C2C2C; /* 메시지 영역 배경색 */
+    color: #FFFFFF;
+    padding: 10px;
+    overflow-y: auto;
+    max-height: 500px; /* 메시지 영역 최대 높이 설정 */
+}
+
+/* 개별 메시지 스타일 */
+.message {
+    background-color: #333; /* 개별 메시지 배경색 */
+    color: #fff;
+    margin-bottom: 8px;
+    padding: 10px;
+    border-radius: 10px; /* 테두리 둥근 모서리 */
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3); /* 그림자 효과 */
+    display: flex;
+    align-items: center;
+}
+
+/* 닉네임 스타일 */
+.nickname {
+    margin-right: 12px;
+    font-weight: bold;
+    color: #4DD0E1; /* 닉네임 색상 */
+}
+
+/* 메시지 텍스트 스타일 */
+.message-text {
+    flex-grow: 1;
+}
 
