@@ -1,20 +1,24 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
-    <title>메시지 보드</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-    <script src="main.js" defer></script>
+    <meta charset="UTF-8">
+    <title>메시지 앱</title>
+    <link rel="stylesheet" href="style.css"> <!-- CSS 파일을 여기에 연결 -->
 </head>
 <body>
-    <div id="container">
-        <div id="messages"></div>
-        <div id="inputArea">
-            <input type="text" id="nickname" placeholder="닉네임">
-            <textarea id="message" placeholder="메시지"></textarea>
-            <button onclick="sendMessage()">전송</button>
+    <div id="app">
+        <!-- 메시지 입력 영역 -->
+        <div id="input-area">
+            <input type="text" id="nickname" placeholder="닉네임을 입력하세요">
+            <textarea id="message" placeholder="메시지를 입력하세요"></textarea>
+            <button onclick="sendMessage()">보내기</button>
         </div>
+        <!-- 메시지 표시 영역 -->
+        <div id="messages"></div>
     </div>
+
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="app.js"></script> <!-- JavaScript 파일을 여기에 연결 -->
 </body>
 </html>

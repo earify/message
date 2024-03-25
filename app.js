@@ -41,3 +41,30 @@ messagesRef.on('child_added', function(snapshot) {
 
   document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
+
+messagesRef.on('child_added', function(snapshot) {
+  const message = snapshot.val();
+
+  // 메시지를 담을 요소 생성
+  const messageElement = document.createElement('div');
+  messageElement.classList.add('message-element'); // CSS 클래스 추가
+
+  // 닉네임 부분 생성
+  const nicknameElement = document.createElement('span');
+  nicknameElement.classList.add('message-nickname');
+  nicknameElement.textContent = `${message.nickname}: `;
+
+  // 메시지 내용 부분 생성
+  const messageContent = document.createElement('span');
+  messageContent.textContent = message.message;
+
+  // 메시지 요소에 닉네임과 내용 추가
+  messageElement.appendChild(nicknameElement);
+  messageElement.appendChild(messageContent);
+
+  // 최종적으로 메시지 요소를 메시지 컨테이너에 추가
+  document.getElementById('messages').appendChild(messageElement);
+
+  // 스크롤 자동 하단 조정
+  document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
+});
