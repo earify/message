@@ -2,6 +2,27 @@
 <html>
 <head>
     <title>메시지 보드</title>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+        }
+        #container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        #messages {
+            flex-grow: 1;
+            overflow-y: auto;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+        #inputArea {
+            padding: 10px;
+            box-sizing: border-box;
+        }
+    </style>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
     <script>
@@ -16,17 +37,18 @@
             appId: "1:88430514111:web:1432b05b11eec790061b0a",
             measurementId: "G-8QDM93Y88C"
         };
-        // Firebase 초기화
         firebase.initializeApp(firebaseConfig);
     </script>
 </head>
 <body>
-    <div>
-        <input type="text" id="nickname" placeholder="닉네임">
-        <textarea id="message" placeholder="메시지"></textarea>
-        <button onclick="sendMessage()">전송</button>
+    <div id="container">
+        <div id="messages"></div>
+        <div id="inputArea">
+            <input type="text" id="nickname" placeholder="닉네임">
+            <textarea id="message" placeholder="메시지"></textarea>
+            <button onclick="sendMessage()">전송</button>
+        </div>
     </div>
-    <div id="messages" style="height: 400px; overflow-y: auto;"></div>
 
     <script>
         const messagesRef = firebase.database().ref('messages');
@@ -44,7 +66,7 @@
         document.getElementById('message').addEventListener('keydown', function(event) {
             if (event.shiftKey && event.key === 'Enter') {
                 event.preventDefault();
-                this.value = this.value + "\n";
+                this.value += "\n";
             } else if (event.key === 'Enter') {
                 event.preventDefault();
                 sendMessage();
@@ -56,8 +78,7 @@
             const messageElement = document.createElement('div');
             messageElement.textContent = `${message.nickname}: ${message.message}`;
             document.getElementById('messages').appendChild(messageElement);
-            
-            // 채팅창을 최하단으로 스크롤
+
             document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
         });
     </script>
