@@ -1,31 +1,43 @@
-document.addEventListener('DOMContentLoaded', function() {
-  const messageInput = document.getElementById('message');
-  const nicknameInput = document.getElementById('nickname');
-  const messagesContainer = document.getElementById('messages');
+var firebaseConfig = {
+  // 복사한 Firebase 설정을 여기에 붙여넣습니다.
+  apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
+  authDomain: "msgify-fa5b6.firebaseapp.com",
+  databaseURL: "https://msgify-fa5b6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "msgify-fa5b6",
+  storageBucket: "msgify-fa5b6.appspot.com",
+  messagingSenderId: "88430514111",
+  appId: "1:88430514111:web:1432b05b11eec790061b0a",
+  measurementId: "G-8QDM93Y88C"
+};
+firebase.initializeApp(firebaseConfig);
 
-  // 메시지 보내기 함수
-  function sendMessage() {
-      const nickname = nicknameInput.value.trim();
-      const message = messageInput.value.trim();
+const messagesRef = firebase.database().ref('messages');
 
-      if (message) { // 메시지 입력 확인
-          const messageElement = document.createElement('div'); // 메시지 요소 생성
-          messageElement.classList.add('message-element'); // 스타일을 위한 클래스 추가
-          messageElement.innerHTML = `<strong class="message-nickname">${nickname || '익명'}:</strong> ${message}`;
-          messagesContainer.appendChild(messageElement); // 메시지를 메시지 컨테이너에 추가
-          messageInput.value = ''; // 입력 필드 초기화
-          messagesContainer.scrollTop = messagesContainer.scrollHeight; // 가장 최근 메시지 보이도록 스크롤
-      }
+function sendMessage() {
+  const nickname = document.getElementById('nickname').value.trim();
+  const message = document.getElementById('message').value.trim();
+
+  if (nickname && message) {
+      messagesRef.push({ nickname, message });
+      document.getElementById('message').value = ''; // 메시지 필드 초기화
   }
+}
 
-  // '보내기' 버튼을 클릭하면 메시지 보내기
-  document.querySelector('button').addEventListener('click', sendMessage);
+document.getElementById('message').addEventListener('keydown', function(event) {
+  if (event.shiftKey && event.key === 'Enter') {
+      event.preventDefault();
+      this.value += "\n";
+  } else if (event.key === 'Enter') {
+      event.preventDefault();
+      sendMessage();
+  }
+});
 
-  // 엔터 키를 누르면 메시지 보내기
-  messageInput.addEventListener('keypress', function(e) {
-      if (e.key === 'Enter') {
-          sendMessage();
-          e.preventDefault(); // 폼 제출 방지
-      }
-  });
+messagesRef.on('child_added', function(snapshot) {
+  const message = snapshot.val();
+  const messageElement = document.createElement('div');
+  messageElement.textContent = `${message.nickname}: ${message.message}`;
+  document.getElementById('messages').appendChild(messageElement);
+
+  document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
