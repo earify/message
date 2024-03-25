@@ -1,3 +1,18 @@
+const firebaseConfig = {
+  // 복사한 Firebase 설정을 여기에 붙여넣습니다.
+  apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
+  authDomain: "msgify-fa5b6.firebaseapp.com",
+  databaseURL: "https://msgify-fa5b6-default-rtdb.asia-southeast1.firebasedatabase.app",
+  projectId: "msgify-fa5b6",
+  storageBucket: "msgify-fa5b6.appspot.com",
+  messagingSenderId: "88430514111",
+  appId: "1:88430514111:web:1432b05b11eec790061b0a",
+  measurementId: "G-8QDM93Y88C"
+};
+// Firebase 초기화
+firebase.initializeApp(firebaseConfig);
+
+
 // Firebase Realtime Database 참조
 const database = firebase.database();
 
@@ -29,3 +44,5 @@ function displayMessage(message) {
   // 채팅이 추가될 때마다 스크롤을 아래로 이동
   chatBox.scrollTop = chatBox.scrollHeight;
 }
+
+document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
