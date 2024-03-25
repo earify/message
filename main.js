@@ -16,33 +16,40 @@ firebase.initializeApp(firebaseConfig);
 // Firebase Realtime Database 참조
 const database = firebase.database();
 
-// 메시지 저장 및 표시 관련 함수
+const messagesRef = firebase.database().ref('messages');
+
 function sendMessage() {
-  const messageInput = document.getElementById("message-input");
-  const message = messageInput.value;
-  if (message.trim() !== "") {
-    database.ref("messages").push({
-      nickname: nickname,
-      message: message,
-    });
-    messageInput.value = "";
-  }
+    const nickname = document.getElementById('nickname').value.trim();
+    const message = document.getElementById('message').value.trim();
+
+    if (nickname && message) {
+        messagesRef.push({ nickname, message });
+        document.getElementById('message').value = ''; // 메시지 필드 초기화
+    }
 }
 
-// 메시지 표시
-database.ref("messages").on("child_added", function(snapshot) {
-  const message = snapshot.val();
-  displayMessage(message.nickname + ": " + message.message);
+// 메시지 입력 필드에 키 이벤트 리스너 추가
+document.getElementById('message').addEventListener('keydown', function(event) {
+    // Shift + Enter가 눌렸을 때는 줄바꿈 처리
+    if (event.shiftKey && event.key === 'Enter') {
+        // 기본 이벤트를 방지하여 줄바꿈 처리
+        event.preventDefault();
+        this.value = this.value + "\n";
+    }
+    // Enter만 눌렸을 때는 메시지 전송
+    else if (event.key === 'Enter') {
+        event.preventDefault(); // Enter 키의 기본 이벤트(폼 제출 등) 방지
+        sendMessage();
+    }
 });
 
-// 보낸 메시지를 실시간으로 화면에 표시하는 함수
-function displayMessage(message) {
-  const chatBox = document.getElementById("chat-box");
-  const messageElement = document.createElement("div");
-  messageElement.textContent = message;
-  chatBox.appendChild(messageElement);
-  // 채팅이 추가될 때마다 스크롤을 아래로 이동
-  chatBox.scrollTop = chatBox.scrollHeight;
-}
+// 실시간으로 메시지 가져오기
+messagesRef.on('child_added', function(snapshot) {
+    const message = snapshot.val();
+    const messageElement = document.createElement('div');
+    messageElement.textContent = `${message.nickname}: ${message.message}`;
+    document.getElementById('messages').appendChild(messageElement);
+});
 
+// 메시지 추가 로직 후...
 document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
