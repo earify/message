@@ -26,12 +26,7 @@ body, html {
     background-color: #fff;
 }
 
-#nickname, #message {
-    flex: 1;
-    margin: 0 10px 0 0;
-    padding: 10px;
-}
-
+#nickname, 
 button {
     padding: 10px;
     cursor: pointer;
