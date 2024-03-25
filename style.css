@@ -1,6 +1,7 @@
 body, html {
     height: 100%;
     margin: 0;
+    font-family: Arial, sans-serif; /* 폰트 스타일 추가 */
 }
 #container {
     display: flex;
@@ -14,6 +15,25 @@ body, html {
     box-sizing: border-box;
 }
 #inputArea {
+    display: flex; /* flexbox 적용 */
     padding: 10px;
     box-sizing: border-box;
+}
+#nickname, #message, button {
+    height: 40px; /* 입력칸과 버튼의 높이 */
+    margin: 0; /* 기본 마진 제거 */
+    padding: 0 10px; /* 패딩 추가 */
+    box-sizing: border-box; /* 박스 사이징 */
+}
+#nickname {
+    flex: 0 1 150px; /* 닉네임 칸을 150px로 제한 */
+    margin-right: 10px; /* 메시지 칸과의 간격 */
+}
+#message {
+    flex: 1; /* 남은 공간을 모두 차지 */
+    margin-right: 10px; /* 버튼과의 간격 */
+}
+button {
+    flex: 0 1 auto; /* 자동 크기 조정, 필요한 만큼의 공간 차지 */
+    cursor: pointer; /* 버튼 위에 마우스를 올리면 포인터 변경 */
 }
