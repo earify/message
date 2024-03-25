@@ -2,23 +2,21 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>메시지 앱</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
+    <title>채팅 애플리케이션</title>
+    <link rel="stylesheet" href="style.css"> <!-- CSS 파일 링크 -->
 </head>
 <body>
-    <div id="app">
-        <!-- 메시지 입력 영역 -->
-        <div id="input-area">
-            <input type="text" id="nickname" placeholder="닉네임을 입력하세요">
-            <textarea id="message" placeholder="메시지를 입력하세요"></textarea>
+    <div id="container">
+        <div id="messages">
+            <!-- 메시지들이 표시될 부분 -->
+        </div>
+        <div id="inputArea">
+            <input type="text" id="nickname" placeholder="닉네임">
+            <input type="text" id="message" placeholder="메시지 입력">
             <button onclick="sendMessage()">보내기</button>
         </div>
-        <!-- 메시지 표시 영역 -->
-        <div id="messages"></div>
     </div>
 
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-    <script src="app.js"></script> <!-- JavaScript 파일을 여기에 연결 -->
+    <script src="app.js"></script> <!-- JavaScript 파일 링크 -->
 </body>
 </html>
