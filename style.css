@@ -9,8 +9,10 @@ body, html {
 #container {
     display: flex;
     flex-direction: column;
+    justify-content: space-between; /* 컨테이너 내 요소들을 상단과 하단으로 분리 */
     height: 100%;
 }
+
 
 
 /* 메시지 컨테이너 스타일 */
@@ -65,6 +67,14 @@ body, html {
     flex: 1;
     margin-right: 10px;
 }
+
+#container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 100vh; /* 전체 화면 높이를 차지하도록 변경 */
+}
+
 
 button {
     flex: 0 1 auto;
