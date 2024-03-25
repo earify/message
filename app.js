@@ -1,82 +1,57 @@
-var firebaseConfig = {
-  // 복사한 Firebase 설정을 여기에 붙여넣습니다.
-  apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
-  authDomain: "msgify-fa5b6.firebaseapp.com",
-  databaseURL: "https://msgify-fa5b6-default-rtdb.asia-southeast1.firebasedatabase.app",
-  projectId: "msgify-fa5b6",
-  storageBucket: "msgify-fa5b6.appspot.com",
-  messagingSenderId: "88430514111",
-  appId: "1:88430514111:web:1432b05b11eec790061b0a",
-  measurementId: "G-8QDM93Y88C"
+const firebaseConfig = {
+  apiKey: "API_KEY",
+  authDomain: "PROJECT_ID.firebaseapp.com",
+  projectId: "PROJECT_ID",
+  storageBucket: "PROJECT_ID.appspot.com",
+  messagingSenderId: "SENDER_ID",
+  appId: "APP_ID",
+  measurementId: "G-MEASUREMENT_ID",
+  databaseURL: "https://PROJECT_ID.firebaseio.com"
 };
+// Firebase 초기화
 firebase.initializeApp(firebaseConfig);
 
-const messagesRef = firebase.database().ref('messages');
 
-function sendMessage() {
-  const nickname = document.getElementById('nickname').value.trim();
-  const message = document.getElementById('message').value.trim();
-  const color = document.getElementById('colorPicker').value; // 색상 선택 정보 가져오기
+document.addEventListener('DOMContentLoaded', function() {
+  const messageInput = document.getElementById('message');
+  const nicknameInput = document.getElementById('nickname');
+  const messagesContainer = document.getElementById('messages');
 
-  if (nickname && message) {
-      messagesRef.push({ nickname, message, color }); // 색상 정보도 함께 저장
-      document.getElementById('message').value = ''; // 메시지 필드 초기화
-  }
-}
-
-
-document.getElementById('message').addEventListener('keydown', function(event) {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      sendMessage();
-  }
+// Firebase Database에서 메시지를 읽어오는 함수
+firebase.database().ref('messages').on('child_added', function(snapshot) {
+  const messageData = snapshot.val();
+  displayMessage(messageData.nickname, messageData.message, messageData.timestamp);
 });
 
-// 최근 메시지 50개만 로딩
-const recentMessagesRef = messagesRef.limitToLast(50);
 
-recentMessagesRef.on('child_added', function(snapshot) {
-  // 메시지 표시 로직
-  const message = snapshot.val();
-  const messageElement = document.createElement('div');
-  
-  // 닉네임에 사용자가 선택한 색상과 볼드체 적용
-  const nicknameElement = document.createElement('span');
-  nicknameElement.textContent = message.nickname;
-  nicknameElement.style.color = message.color; // 색상 적용
-  nicknameElement.classList.add('nickname'); // 볼드체 적용을 위한 클래스 추가
-  
-  messageElement.appendChild(nicknameElement);
-  messageElement.appendChild(document.createTextNode(`: ${message.message}`));
-  
-  document.getElementById('messages').appendChild(messageElement);
-  document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
-});
+  window.sendMessage = function() {
+      const nickname = nicknameInput.value.trim();
+      const message = messageInput.value.trim();
 
-// 쿠키 설정
+      if (message) {
+          // Firebase Database에 메시지 보내기
+          firebase.database().ref('messages').push({
+              nickname: nickname || '익명',
+              message: message
+          });
+          messageInput.value = ''; // 입력 필드 초기화
+      }
+  };
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+  function displayMessage(nickname, message, timestamp) {
+    const messageElement = document.createElement('div');
+    messageElement.classList.add('message-element');
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+    // 시간을 "YYYY/MM/DD HH:mm" 형태로 포맷
+    const timeFormatted = new Intl.DateTimeFormat('ko-KR', {
+        year: 'numeric', month: '2-digit', day: '2-digit',
+        hour: '2-digit', minute: '2-digit', hour12: false
+    }).format(new Date(timestamp));
+    
+    // 시간 포맷을 "YYYY/MM/DD HH:mm" 형식으로 변환
+    const timeString = timeFormatted.replace(/\./g, '/').replace(' ', ' ').replace(/\:/g, ':');
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
-
-document.getElementById("saveButton").addEventListener("click", function(){
-  let nickname = document.getElementById("nickname").value;
-  setCookie("userNickname", nickname, 30); // 닉네임을 7일 동안 저장
-});
+    messageElement.innerHTML = `<strong>[${timeString}] ${nickname}:</strong> ${message}`;
+    messagesContainer.appendChild(messageElement);
+    messagesContainer.scrollTop = messagesContainer.scrollHeight;
+}});
