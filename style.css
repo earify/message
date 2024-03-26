@@ -28,6 +28,7 @@ body, html {
 /* 입력 영역 설정 */
 #inputArea {
   display: flex;
+  justify-content: flex-end; /* 화면 최하단에 위치하도록 설정 */
   padding: 10px;
   background: #444; /* 다크 모드에서의 배경색 */
 }

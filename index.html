@@ -1,24 +1,42 @@
+<!-- index.html -->
 <!DOCTYPE html>
 <html>
 <head>
-    <title>메시지 보드</title>
-    <link rel="stylesheet" href="style.css">
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
-    <script src="app.js" defer></script>
+    <title>메인 페이지</title>
+    <style>
+        body {
+            background-color: #181818; /* 검은색 배경 */
+            color: #ffffff; /* 글자 색상을 흰색으로 설정 */
+        }
+
+        /* 버튼 스타일 */
+        .chatButton {
+            background-color: #4CAF50; /* Green */
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div id="container">
-      <!-- 색상을 선택할 수 있는 입력 필드 추가 -->
-<label for="colorPicker">닉네임 색상:</label>
-<input type="color" id="colorPicker" name="colorPicker" value="#ffffff">
+    <h1>메인 페이지</h1>
+    <!-- 채팅방으로 이동하는 버튼들 -->
+    <button onclick="goToChatRoom('chat1.html')" class="chatButton">채팅방 1</button>
+    <button onclick="goToChatRoom('chat2.html')" class="chatButton">채팅방 2</button>
+    <button onclick="goToChatRoom('chat3.html')" class="chatButton">채팅방 3</button>
 
-        <div id="messages"></div>
-        <div id="inputArea">
-            <input type="text" id="nickname" placeholder="닉네임">
-            <textarea id="message" placeholder="메시지"></textarea>
-            <button onclick="sendMessage()">전송</button>
-        </div>
-    </div>
+    <script>
+        // 채팅방으로 이동하는 함수
+        function goToChatRoom(url) {
+            window.location.href = url;
+        }
+    </script>
 </body>
 </html>
