@@ -18,9 +18,12 @@ function sendMessage() {
   const message = document.getElementById('message').value.trim();
   const color = document.getElementById('colorPicker').value; // 색상 선택 정보 가져오기
 
-  if (nickname && message) {
+  // 메시지 길이가 100을 초과하는지 확인
+  if (nickname && message && message.length <= 100) {
       messagesRef.push({ nickname, message, color }); // 색상 정보도 함께 저장
       document.getElementById('message').value = ''; // 메시지 필드 초기화
+  } else {
+      alert("메시지는 100글자 이하여야 합니다.");
   }
 }
 
@@ -55,28 +58,28 @@ recentMessagesRef.on('child_added', function(snapshot) {
 
 // 쿠키 설정
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+// function setCookie(cname, cvalue, exdays) {
+//   const d = new Date();
+//   d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//   let expires = "expires="+ d.toUTCString();
+//   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// }
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+// function setCookie(cname, cvalue, exdays) {
+//   const d = new Date();
+//   d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//   let expires = "expires="+ d.toUTCString();
+//   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// }
 
-function setCookie(cname, cvalue, exdays) {
-  const d = new Date();
-  d.setTime(d.getTime() + (exdays*24*60*60*1000));
-  let expires = "expires="+ d.toUTCString();
-  document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
-}
+// function setCookie(cname, cvalue, exdays) {
+//   const d = new Date();
+//   d.setTime(d.getTime() + (exdays*24*60*60*1000));
+//   let expires = "expires="+ d.toUTCString();
+//   document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+// }
 
-document.getElementById("saveButton").addEventListener("click", function(){
-  let nickname = document.getElementById("nickname").value;
-  setCookie("userNickname", nickname, 30); // 닉네임을 7일 동안 저장
-});
+// document.getElementById("saveButton").addEventListener("click", function(){
+//   let nickname = document.getElementById("nickname").value;
+//   setCookie("userNickname", nickname, 30); // 닉네임을 7일 동안 저장
+// });
