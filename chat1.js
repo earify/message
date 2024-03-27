@@ -98,8 +98,8 @@ recentMessagesRef.on('child_added', function(snapshot) {
   const message = snapshot.val();
   const messageElement = document.createElement('div');
   
-  // 사용자 코드 가져오기
-  const userCode = getUserCode();
+  // 각 메시지에 해당하는 사용자의 식별 코드 가져오기
+  const userCode = message.userCode;
 
   // 닉네임과 개인 식별 코드를 조합하여 표시
   const nickname = `${message.nickname}(${userCode})`; // 닉네임과 개인 식별 코드 조합
@@ -115,17 +115,11 @@ recentMessagesRef.on('child_added', function(snapshot) {
   
   // 메시지를 최신 메시지 아래에 추가하는 대신, 최신 메시지 위에 추가
   const messagesDiv = document.getElementById('messages');
-  messagesDiv.appendChild(messageElement);
+  messagesDiv.insertBefore(messageElement, messagesDiv.firstChild);
 
   // 스크롤 위치 조정
   document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
-
-
-
-function goToMainPage() {
-  window.location.href = 'index.html'; // 메인 페이지로 이동
-}
 
 // 최근 메시지가 도착할 때 알림을 생성하고 사용자에게 보내는 코드
 recentMessagesRef.on('child_added', function(snapshot) {
@@ -137,12 +131,11 @@ recentMessagesRef.on('child_added', function(snapshot) {
   };
 
   // 알림 권한 요청
-Notification.requestPermission().then(function(permission) {
-  if (permission === 'granted') {
-      console.log('알림 권한이 허용되었습니다.');
-  }
-});
-
+  Notification.requestPermission().then(function(permission) {
+    if (permission === 'granted') {
+        console.log('알림 권한이 허용되었습니다.');
+    }
+  });
 
   // 알림 생성 및 전송
   if (Notification.permission === 'granted') {
