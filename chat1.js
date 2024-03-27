@@ -93,28 +93,34 @@ document.getElementById('message').addEventListener('keydown', function(event) {
 // 최근 메시지 50개만 로딩
 const recentMessagesRef = messagesRef1.limitToLast(100);
 
-// 최근 메시지가 아래에서부터 오름차순으로 정렬되도록 변경된 코드
+// 최근 메시지가 도착할 때 개인 식별 코드를 포함하여 채팅 내용을 표시하는 코드
 recentMessagesRef.on('child_added', function(snapshot) {
-  // 메시지 표시 로직
   const message = snapshot.val();
   const messageElement = document.createElement('div');
   
+  // 사용자 코드 가져오기
+  const userCode = getUserCode();
+
+  // 닉네임과 개인 식별 코드를 조합하여 표시
+  const nickname = `${message.nickname}(${userCode})`; // 닉네임과 개인 식별 코드 조합
+
   // 닉네임에 사용자가 선택한 색상과 볼드체 적용
   const nicknameElement = document.createElement('span');
-  nicknameElement.textContent = message.nickname;
+  nicknameElement.textContent = nickname;
   nicknameElement.style.color = message.color; // 색상 적용
   nicknameElement.classList.add('nickname'); // 볼드체 적용을 위한 클래스 추가
   
   messageElement.appendChild(nicknameElement);
   messageElement.appendChild(document.createTextNode(`: ${message.message}`));
   
-  // 메시지를 최신 메시지 아래에 추가하는 대신, 최신 메시지 아래에 추가
+  // 메시지를 최신 메시지 아래에 추가하는 대신, 최신 메시지 위에 추가
   const messagesDiv = document.getElementById('messages');
   messagesDiv.appendChild(messageElement);
-  
+
   // 스크롤 위치 조정
   document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
+
 
 
 function goToMainPage() {
@@ -143,3 +149,48 @@ Notification.requestPermission().then(function(permission) {
       new Notification(notificationTitle, notificationOptions);
   }
 });
+
+// 사용자에게 랜덤 코드를 생성하고 쿠키로 저장하는 함수
+function assignUserCode() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < 4; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  document.cookie = `userCode=${code}; expires=Fri, 31 Dec 9999 23:59:59 GMT`; // 쿠키에 코드 저장
+  return code;
+}
+
+// 사용자 코드가 이미 생성되어 있는지 확인하고, 없으면 생성하는 함수
+function getUserCode() {
+  let userCode = getCookie('userCode');
+  if (!userCode) {
+      userCode = assignUserCode();
+  }
+  return userCode;
+}
+
+// 쿠키에서 특정 이름의 쿠키 값을 가져오는 함수
+function getCookie(name) {
+  const cookieArray = document.cookie.split(';');
+  for (let i = 0; i < cookieArray.length; i++) {
+      const cookiePair = cookieArray[i].split('=');
+      const cookieName = cookiePair[0].trim();
+      if (cookieName === name) {
+          return cookiePair[1];
+      }
+  }
+  return null;
+}
+
+// 사용자 코드를 이용하여 닉네임 생성하는 함수
+function generateNickname() {
+  const userCode = getUserCode(); // 사용자 코드 가져오기
+  const nickname = userCode + '-' + prompt('닉네임을 입력하세요:'); // 사용자로부터 닉네임 입력 받음
+  return nickname;
+}
+
+// 최초로 페이지를 방문했을 때 사용자 코드 생성
+window.onload = function() {
+  getUserCode();
+};
