@@ -120,3 +120,26 @@ recentMessagesRef.on('child_added', function(snapshot) {
 function goToMainPage() {
   window.location.href = 'index.html'; // 메인 페이지로 이동
 }
+
+// 최근 메시지가 도착할 때 알림을 생성하고 사용자에게 보내는 코드
+recentMessagesRef.on('child_added', function(snapshot) {
+  const message = snapshot.val();
+  const notificationTitle = '새로운 메시지 도착';
+  const notificationOptions = {
+      body: `${message.nickname}: ${message.message}`,
+      icon: 'icon.png' // 알림에 표시될 아이콘
+  };
+
+  // 알림 권한 요청
+Notification.requestPermission().then(function(permission) {
+  if (permission === 'granted') {
+      console.log('알림 권한이 허용되었습니다.');
+  }
+});
+
+
+  // 알림 생성 및 전송
+  if (Notification.permission === 'granted') {
+      new Notification(notificationTitle, notificationOptions);
+  }
+});
