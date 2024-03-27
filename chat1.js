@@ -1,4 +1,4 @@
-var firebaseConfig = {
+const firebaseConfig = {
   // 복사한 Firebase 설정을 여기에 붙여넣습니다.
   apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
   authDomain: "msgify-fa5b6.firebaseapp.com",
@@ -60,14 +60,14 @@ function sendMessage() {
   if (nickname && color) {
       setNicknameCookie(nickname, color);
   }
-  // 닉네임 길이가 10을 초과하는지 확인
-  if (nickname.length > 10) {
-      alert("닉네임은 10글자 이하여야 합니다.");
+  // 닉네임 길이가 20을 초과하는지 확인
+  if (nickname.length > 20) {
+      alert("닉네임은 20글자 이하여야 합니다.");
       return; // 함수 종료
   }
 
-  // 메시지 길이가 100을 초과하는지 확인
-  if (nickname && message && message.length <= 100) {
+  // 메시지 길이가 50을 초과하는지 확인
+  if (nickname && message && message.length <= 50) {
       isMessageSending = true; // 메시지 전송 중으로 설정
       messagesRef1.push({ nickname, message, color }); // 색상 정보도 함께 저장
       document.getElementById('message').value = ''; // 메시지 필드 초기화
@@ -76,8 +76,8 @@ function sendMessage() {
       setTimeout(() => {
           isMessageSending = false;
       }, 1000);
-  } else if (message.length > 100) {
-      alert("메시지는 100글자 이하여야 합니다.");
+  } else if (message.length > 50) {
+      alert("메시지는 50글자 이하여야 합니다.");
   } else {
       alert("닉네임과 메시지를 입력하세요.");
   }
@@ -93,30 +93,65 @@ document.getElementById('message').addEventListener('keydown', function(event) {
 // 최근 메시지 50개만 로딩
 const recentMessagesRef = messagesRef1.limitToLast(100);
 
-// 최근 메시지가 아래에서부터 오름차순으로 정렬되도록 변경된 코드
+// 최근 메시지가 도착할 때 개인 식별 코드를 포함하여 채팅 내용을 표시하는 코드
 recentMessagesRef.on('child_added', function(snapshot) {
-  // 메시지 표시 로직
   const message = snapshot.val();
   const messageElement = document.createElement('div');
   
+  // 각 메시지에 해당하는 사용자의 식별 코드 가져오기
+  const userCode = message.userCode;
+
+  // 닉네임과 개인 식별 코드를 조합하여 표시
+  const nickname = `${message.nickname}(${userCode})`; // 닉네임과 개인 식별 코드 조합
+
   // 닉네임에 사용자가 선택한 색상과 볼드체 적용
   const nicknameElement = document.createElement('span');
-  nicknameElement.textContent = message.nickname;
+  nicknameElement.textContent = nickname;
   nicknameElement.style.color = message.color; // 색상 적용
   nicknameElement.classList.add('nickname'); // 볼드체 적용을 위한 클래스 추가
   
   messageElement.appendChild(nicknameElement);
   messageElement.appendChild(document.createTextNode(`: ${message.message}`));
   
-  // 메시지를 최신 메시지 아래에 추가하는 대신, 최신 메시지 아래에 추가
+  // 메시지를 최신 메시지 아래에 추가하는 대신, 최신 메시지 위에 추가
   const messagesDiv = document.getElementById('messages');
-  messagesDiv.appendChild(messageElement);
-  
+  messagesDiv.insertBefore(messageElement, messagesDiv.firstChild);
+
   // 스크롤 위치 조정
   document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
 
+// 최근 메시지가 도착할 때 알림을 생성하고 사용자에게 보내는 코드
+recentMessagesRef.on('child_added', function(snapshot) {
+  const message = snapshot.val();
+  const notificationTitle = '새로운 메시지 도착';
+  const notificationOptions = {
+      body: `${message.nickname}: ${message.message}`,
+      icon: 'icon.png' // 알림에 표시될 아이콘
+  };
 
-function goToMainPage() {
-  window.location.href = 'index.html'; // 메인 페이지로 이동
+  // 알림 권한 요청
+  Notification.requestPermission().then(function(permission) {
+    if (permission === 'granted') {
+        console.log('알림 권한이 허용되었습니다.');
+    }
+  });
+
+  // 알림 생성 및 전송
+  if (Notification.permission === 'granted') {
+      new Notification(notificationTitle, notificationOptions);
+  }
+});
+
+// 사용자에게 랜덤 코드를 생성하고 쿠키로 저장하는 함수
+function assignUserCode() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < 4; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  document.cookie = `userCode=${code}; expires=Fri, 31 Dec 9999 23:59:59 GMT`; // 쿠키에 코드 저장
+  return code;
 }
+
+// 사용자 코드가 이미 생성되어 있는지 확인하고, 없으면 생성하는 함수

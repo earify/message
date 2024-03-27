@@ -1,4 +1,4 @@
-var firebaseConfig = {
+const firebaseConfig = {
   // 복사한 Firebase 설정을 여기에 붙여넣습니다.
   apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
   authDomain: "msgify-fa5b6.firebaseapp.com",
@@ -60,14 +60,14 @@ function sendMessage() {
   if (nickname && color) {
       setNicknameCookie(nickname, color);
   }
-  // 닉네임 길이가 10을 초과하는지 확인
-  if (nickname.length > 10) {
-      alert("닉네임은 10글자 이하여야 합니다.");
+  // 닉네임 길이가 20을 초과하는지 확인
+  if (nickname.length > 20) {
+      alert("닉네임은 20글자 이하여야 합니다.");
       return; // 함수 종료
   }
 
-  // 메시지 길이가 100을 초과하는지 확인
-  if (nickname && message && message.length <= 100) {
+  // 메시지 길이가 500을 초과하는지 확인
+  if (nickname && message && message.length <= 500) {
       isMessageSending = true; // 메시지 전송 중으로 설정
       messagesRef2.push({ nickname, message, color }); // 색상 정보도 함께 저장
       document.getElementById('message').value = ''; // 메시지 필드 초기화
@@ -76,8 +76,8 @@ function sendMessage() {
       setTimeout(() => {
           isMessageSending = false;
       }, 1000);
-  } else if (message.length > 100) {
-      alert("메시지는 100글자 이하여야 합니다.");
+  } else if (message.length > 500) {
+      alert("메시지는 500글자 이하여야 합니다.");
   } else {
       alert("닉네임과 메시지를 입력하세요.");
   }

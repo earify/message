@@ -1,4 +1,4 @@
-var firebaseConfig = {
+const firebaseConfig = {
   // 복사한 Firebase 설정을 여기에 붙여넣습니다.
   apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
   authDomain: "msgify-fa5b6.firebaseapp.com",
@@ -60,9 +60,9 @@ function sendMessage() {
   if (nickname && color) {
       setNicknameCookie(nickname, color);
   }
-  // 닉네임 길이가 10을 초과하는지 확인
-  if (nickname.length > 10) {
-      alert("닉네임은 10글자 이하여야 합니다.");
+  // 닉네임 길이가 20을 초과하는지 확인
+  if (nickname.length > 20) {
+      alert("닉네임은 20글자 이하여야 합니다.");
       return; // 함수 종료
   }
 
