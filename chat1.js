@@ -1,4 +1,4 @@
-var firebaseConfig = {
+const firebaseConfig = {
   // 복사한 Firebase 설정을 여기에 붙여넣습니다.
   apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
   authDomain: "msgify-fa5b6.firebaseapp.com",
@@ -13,17 +13,19 @@ firebase.initializeApp(firebaseConfig);
 
 const messagesRef1 = firebase.database().ref('messages/chatting1');
 
-// 사용자의 닉네임과 닉네임 색상을 쿠키에 저장하는 함수
-function setNicknameCookie(nickname, color) {
+// 사용자의 닉네임과 닉네임 색상, 식별 코드를 쿠키에 저장하는 함수
+function setUserDataToCookie(nickname, color, userCode) {
   document.cookie = `nickname=${encodeURIComponent(nickname)};expires=Fri, 31 Dec 9999 23:59:59 GMT`;
   document.cookie = `nicknameColor=${encodeURIComponent(color)};expires=Fri, 31 Dec 9999 23:59:59 GMT`;
+  document.cookie = `userCode=${encodeURIComponent(userCode)};expires=Fri, 31 Dec 9999 23:59:59 GMT`;
 }
 
 // 사용자의 닉네임과 닉네임 색상을 쿠키에서 읽어오는 함수
-function getNicknameCookie() {
+function getUserDataFromCookie() {
   const cookies = document.cookie.split(';');
   let nickname = '';
   let color = '';
+  let userCode = '';
   cookies.forEach(cookie => {
       const [name, value] = cookie.trim().split('=');
       if (name === 'nickname') {
@@ -32,18 +34,25 @@ function getNicknameCookie() {
       if (name === 'nicknameColor') {
           color = decodeURIComponent(value);
       }
+      if (name === 'userCode') {
+          userCode = decodeURIComponent(value);
+      }
   });
-  return { nickname, color };
+  return { nickname, color, userCode };
 }
 
-// 페이지 로드 시 쿠키에서 닉네임과 닉네임 색상 읽어오기
+// 페이지 로드 시 쿠키에서 사용자 정보 읽어오기
 window.addEventListener('load', function() {
-  const { nickname, color } = getNicknameCookie();
+  const { nickname, color, userCode } = getUserDataFromCookie();
   if (nickname) {
       document.getElementById('nickname').value = nickname;
   }
   if (color) {
       document.getElementById('colorPicker').value = color;
+  }
+  if (!userCode) {
+      const newUserCode = assignUserCode();
+      setUserDataToCookie('', '', newUserCode);
   }
 });
 
@@ -55,11 +64,15 @@ function sendMessage() {
   const nickname = document.getElementById('nickname').value.trim();
   const message = document.getElementById('message').value.trim();
   const color = document.getElementById('colorPicker').value; // 색상 선택 정보 가져오기
-  
+
+  // 사용자 정보 읽어오기
+  const { userCode } = getUserDataFromCookie();
+
   // 닉네임과 색상이 입력되었을 때에만 쿠키 저장
   if (nickname && color) {
-      setNicknameCookie(nickname, color);
+      setUserDataToCookie(nickname, color, userCode);
   }
+
   // 닉네임 길이가 10을 초과하는지 확인
   if (nickname.length > 10) {
       alert("닉네임은 10글자 이하여야 합니다.");
@@ -69,7 +82,7 @@ function sendMessage() {
   // 메시지 길이가 100을 초과하는지 확인
   if (nickname && message && message.length <= 100) {
       isMessageSending = true; // 메시지 전송 중으로 설정
-      messagesRef1.push({ nickname, message, color }); // 색상 정보도 함께 저장
+      messagesRef1.push({ nickname, message, color, userCode }); // 색상 정보와 사용자 코드도 함께 저장
       document.getElementById('message').value = ''; // 메시지 필드 초기화
 
       // 메시지 전송 후 1초 후에 다시 전송 가능하도록 잠금 해제
@@ -90,7 +103,7 @@ document.getElementById('message').addEventListener('keydown', function(event) {
   }
 });
 
-// 최근 메시지 50개만 로딩
+// 최근 메시지 100개만 로딩
 const recentMessagesRef = messagesRef1.limitToLast(100);
 
 // 최근 메시지가 아래에서부터 오름차순으로 정렬되도록 변경된 코드
@@ -101,7 +114,7 @@ recentMessagesRef.on('child_added', function(snapshot) {
   
   // 닉네임에 사용자가 선택한 색상과 볼드체 적용
   const nicknameElement = document.createElement('span');
-  nicknameElement.textContent = message.nickname;
+  nicknameElement.textContent = `${message.nickname} (${message.userCode})`;
   nicknameElement.style.color = message.color; // 색상 적용
   nicknameElement.classList.add('nickname'); // 볼드체 적용을 위한 클래스 추가
   
@@ -116,7 +129,13 @@ recentMessagesRef.on('child_added', function(snapshot) {
   document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
 
-
-function goToMainPage() {
-  window.location.href = 'index.html'; // 메인 페이지로 이동
+// 사용자에게 랜덤 코드를 생성하고 쿠키로 저장하는 함수
+function assignUserCode() {
+  const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+  let code = '';
+  for (let i = 0; i < 4; i++) {
+      code += characters.charAt(Math.floor(Math.random() * characters.length));
+  }
+  document.cookie = `userCode=${code}; expires=Fri, 31 Dec 9999 23:59:59 GMT`; // 쿠키에 코드 저장
+  return code;
 }

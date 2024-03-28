@@ -11,7 +11,7 @@ const firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 
-const messagesRef3 = firebase.database().ref('messages/chatting3');
+const messagesRef1 = firebase.database().ref('messages/chatting1');
 
 // 사용자의 닉네임과 닉네임 색상을 쿠키에 저장하는 함수
 function setNicknameCookie(nickname, color) {
@@ -66,10 +66,10 @@ function sendMessage() {
       return; // 함수 종료
   }
 
-  // 메시지 길이가 50을 초과하는지 확인
-  if (nickname && message && message.length <= 50) {
+  // 메시지 길이가 100을 초과하는지 확인
+  if (nickname && message && message.length <= 100) {
       isMessageSending = true; // 메시지 전송 중으로 설정
-      messagesRef3.push({ nickname, message, color }); // 색상 정보도 함께 저장
+      messagesRef1.push({ nickname, message, color }); // 색상 정보도 함께 저장
       document.getElementById('message').value = ''; // 메시지 필드 초기화
 
       // 메시지 전송 후 1초 후에 다시 전송 가능하도록 잠금 해제
@@ -77,7 +77,7 @@ function sendMessage() {
           isMessageSending = false;
       }, 1000);
   } else if (message.length > 100) {
-      alert("메시지는 50글자 이하여야 합니다.");
+      alert("메시지는 100글자 이하여야 합니다.");
   } else {
       alert("닉네임과 메시지를 입력하세요.");
   }
@@ -90,8 +90,8 @@ document.getElementById('message').addEventListener('keydown', function(event) {
   }
 });
 
-// 최근 메시지 50개만 로딩
-const recentMessagesRef = messagesRef3.limitToLast(100);
+// 최근 메시지 100개만 로딩
+const recentMessagesRef = messagesRef1.limitToLast(100);
 
 // 최근 메시지가 아래에서부터 오름차순으로 정렬되도록 변경된 코드
 recentMessagesRef.on('child_added', function(snapshot) {
@@ -115,6 +115,7 @@ recentMessagesRef.on('child_added', function(snapshot) {
   // 스크롤 위치 조정
   document.getElementById('messages').scrollTop = document.getElementById('messages').scrollHeight;
 });
+
 
 function goToMainPage() {
   window.location.href = 'index.html'; // 메인 페이지로 이동

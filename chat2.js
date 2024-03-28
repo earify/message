@@ -1,4 +1,4 @@
-var firebaseConfig = {
+const firebaseConfig = {
   // 복사한 Firebase 설정을 여기에 붙여넣습니다.
   apiKey: "AIzaSyA98iMqdjl_2gD_TPPTU5kUkqTkGQLypus",
   authDomain: "msgify-fa5b6.firebaseapp.com",
@@ -66,8 +66,8 @@ function sendMessage() {
       return; // 함수 종료
   }
 
-  // 메시지 길이가 100을 초과하는지 확인
-  if (nickname && message && message.length <= 100) {
+  // 메시지 길이가 1000을 초과하는지 확인
+  if (nickname && message && message.length <= 1000) {
       isMessageSending = true; // 메시지 전송 중으로 설정
       messagesRef2.push({ nickname, message, color }); // 색상 정보도 함께 저장
       document.getElementById('message').value = ''; // 메시지 필드 초기화
@@ -76,8 +76,8 @@ function sendMessage() {
       setTimeout(() => {
           isMessageSending = false;
       }, 1000);
-  } else if (message.length > 100) {
-      alert("메시지는 100글자 이하여야 합니다.");
+  } else if (message.length > 1000) {
+      alert("메시지는 1000글자 이하여야 합니다.");
   } else {
       alert("닉네임과 메시지를 입력하세요.");
   }
@@ -90,7 +90,7 @@ document.getElementById('message').addEventListener('keydown', function(event) {
   }
 });
 
-// 최근 메시지 50개만 로딩
+// 최근 메시지 100개만 로딩
 const recentMessagesRef = messagesRef2.limitToLast(100);
 
 // 최근 메시지가 아래에서부터 오름차순으로 정렬되도록 변경된 코드

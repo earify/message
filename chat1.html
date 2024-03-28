@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>메시지 보드</title>
+    <title>채팅방</title>
     <link rel="stylesheet" href="style.css">
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
@@ -13,9 +13,9 @@
         <div id="inputArea">
             <input type="text" id="nickname" placeholder="닉네임">
             <input type="color" id="colorPicker" name="colorPicker" value="#ffffff">
+            <button id="homeButton" onclick="goToMainPage()">홈</button>
             <textarea id="message" placeholder="메시지"></textarea>
-            <button onclick="sendMessage()">전송</button>
-            <button onclick="goToMainPage()">홈</button>
+            <button id="sendButton" onclick="sendMessage()">전송</button>
         </div>
     </div>
 </body>
