@@ -1,3 +1,4 @@
+/* 공통 스타일 */
 /* 전체 페이지에 대한 기본 설정 */
 body, html {
   margin: 0;
@@ -110,4 +111,19 @@ body, html {
 /* 닉네임을 표시하는 span 태그에 볼드 스타일 적용 */
 .nickname {
   font-weight: bold;
+}
+
+/* 핸드폰에서만 적용되는 스타일 */
+@media only screen and (max-width: 600px) {
+  /* 색상 선택 칸 */
+  #colorPicker {
+    max-width: 100%; /* 최대 너비 설정 */
+    margin-left: 0; /* 왼쪽 여백 초기화 */
+  }
+  
+  /* 홈 버튼 */
+  #homeButton {
+    max-width: 100%; /* 최대 너비 설정 */
+    margin-left: 0; /* 왼쪽 여백 초기화 */
+  }
 }
