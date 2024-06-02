@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>테스트 방</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.0.0/firebase-database.js"></script>
+    <script src="chat4.js" defer></script>
+
+</head>
+<body>
+    <div id="container">
+        <div id="messages"></div>
+        <div id="inputArea">
+            <input type="text" id="nickname" placeholder="닉네임">
+            <input type="color" id="colorPicker" name="colorPicker" value="#ffffff">
+            <textarea id="message" placeholder="메시지"></textarea>
+            <button onclick="sendMessage()">전송</button>
+            <button onclick="goToMainPage()">홈</button>
+        </div>
+    </div>
+</body>
+</html>
