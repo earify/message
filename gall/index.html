@@ -1,0 +1,95 @@
+<<<<<<<<<<<<<<  ✨ Codeium Command ⭐ >>>>>>>>>>>>>>>>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatting</title>
+    <!-- for mobile -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no" />
+    <style>
+        .chat {
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+        }
+        .chat-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 50px;
+            background-color: #252525;
+            color: #fffffe;
+            font-family: 'jalnan';
+        }
+        .chat-header h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+        .chat-body {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .chat-body::-webkit-scrollbar {
+            width: 8px;
+        }
+        .chat-body::-webkit-scrollbar-track {
+            background: #252525;
+        }
+        .chat-body::-webkit-scrollbar-thumb {
+            background-color: #fffffe;
+            border-radius: 4px;
+        }
+        .chat-body::-webkit-scrollbar-thumb:hover {
+            background: #fffffe;
+        }
+        .chat-body.messages {
+            padding: 16px;
+        }
+        .chat-form {
+            display: flex;
+            padding: 16px;
+        }
+        .chat-form input {
+            flex: 1;
+            padding: 8px;
+            border: none;
+            border-radius: 4px;
+            background-color: #252525;
+            color: #fffffe;
+            font-family: 'jalnan';
+        }
+        .chat-form button {
+            margin-left: 8px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            background-color: #fffffe;
+            color: #252525;
+            font-family: 'jalnan';
+            cursor: pointer;
+        }
+        .chat-form button:hover {
+            background-color: #252525;
+            color: #fffffe;
+        }
+    </style>
+</head>
+<body>
+    <div class="chat">
+        <div class="chat-header">
+            <h1>Chatting</h1>
+        </div>
+        <div class="chat-body messages">
+            <!-- messages will be inserted here -->
+        </div>
+        <div class="chat-form">
+            <input type="text" placeholder="Type your message">
+            <button>Send</button>
+        </div>
+    </div>
+</body>
+</html>
+<<<<<<<  3180eb8a-c2a0-4139-968c-c4a7f0384b89  >>>>>>>
