@@ -89,8 +89,8 @@ function sendMessage() {
   }
 
   // 닉네임 길이가 30을 초과하는지 확인
-  if (nickname.length > 30) {
-    alert("닉네임은 30글자 이하여야 합니다.");
+  if (nickname.length > 25) {
+    alert("닉네임은 25글자 이하여야 합니다.");
     return; // 함수 종료
   }
 
